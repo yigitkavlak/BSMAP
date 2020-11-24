@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "948662463007",
+    "firebase_url": "https://mapduty-e71dc.firebaseio.com",
+    "project_id": "mapduty-e71dc",
+    "storage_bucket": "mapduty-e71dc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:948662463007:android:c4f7dd0ccb7e4a011cc32a",
+        "android_client_info": {
+          "package_name": "com.yigitkavlak.mapduty"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "948662463007-sn1cagedmeaa5vtog8kdu976ebh3r3h8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa5F7-uPLNihaM7FUmYbkvTrsOPgq1l44"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "948662463007-sn1cagedmeaa5vtog8kdu976ebh3r3h8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
