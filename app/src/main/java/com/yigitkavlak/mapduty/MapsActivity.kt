@@ -12,8 +12,11 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.widget.ImageButton
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.FragmentManager
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -23,6 +26,7 @@ import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_maps.*
 import java.lang.Exception
 import java.util.*
 
@@ -171,6 +175,26 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         override fun onMarkerDragEnd(p0: Marker?) {
 
         }
+
+    }
+
+    fun addTaskClicked(view : View){
+
+        if (addTaskbutton.tag == "pic2"){
+            addTaskbutton.setBackgroundResource(R.drawable.ic_add_button)
+            addTaskbutton.setTag("pic1")
+        }else{
+            addTaskbutton.setBackgroundResource(R.drawable.ic_check_button)
+            addTaskbutton.setTag("pic2")
+        }
+
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+
+        val taskFragment = TaskFragment()
+        fragmentTransaction.add(R.id.frameLayout,taskFragment).commit()
+
 
     }
 }
