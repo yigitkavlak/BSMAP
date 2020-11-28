@@ -20,8 +20,8 @@ class RegisterActivity : AppCompatActivity() {
         fauth = FirebaseAuth.getInstance()
 
         val currenUser = fauth.currentUser
-        if(currenUser!=null){
-            val intent = Intent(applicationContext,MapsActivity::class.java)
+        if (currenUser != null) {
+            val intent = Intent(applicationContext, MapsActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -51,28 +51,40 @@ class RegisterActivity : AppCompatActivity() {
                 finish()
             }
         }.addOnFailureListener { exception ->
-            if(exception!=null){
-                Toast.makeText(applicationContext,exception.localizedMessage.toString(),Toast.LENGTH_LONG).show()
+            if (exception != null) {
+                Toast.makeText(
+                    applicationContext,
+                    exception.localizedMessage.toString(),
+                    Toast.LENGTH_LONG
+                ).show()
             }
         }
     }
 
-    fun loginClicked(view: View){
+    fun loginClicked(view: View) {
 
         val email = userEmailText.text.toString()
         val password = userPasswordText.text.toString()
 
-        fauth.signInWithEmailAndPassword(email,password).addOnCompleteListener {task ->
+        fauth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
 
-            if(task.isSuccessful){
+            if (task.isSuccessful) {
                 //SignedIn
-                Toast.makeText(applicationContext,"Hoşgeldiniz: ${fauth.currentUser!!.email.toString()}",Toast.LENGTH_LONG).show()
+                Toast.makeText(
+                    applicationContext,
+                    "Hoşgeldiniz: ${fauth.currentUser!!.email.toString()}",
+                    Toast.LENGTH_LONG
+                ).show()
                 val intent = Intent(applicationContext, MapsActivity::class.java)
                 startActivity(intent)
                 finish()
             }
-        }.addOnFailureListener {exception ->
-            Toast.makeText(applicationContext,exception.localizedMessage.toString(),Toast.LENGTH_LONG).show()
+        }.addOnFailureListener { exception ->
+            Toast.makeText(
+                applicationContext,
+                exception.localizedMessage.toString(),
+                Toast.LENGTH_LONG
+            ).show()
 
         }
     }

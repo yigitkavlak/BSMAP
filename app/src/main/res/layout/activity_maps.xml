@@ -24,7 +24,8 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentBottom="true"
         android:background="@drawable/ic_add_button"
-        android:onClick="addTaskClicked" />
+        android:onClick="addTaskClicked"
+        android:layout_marginBottom="50dp"/>
 
     <FrameLayout
         android:id="@+id/frameLayout"
