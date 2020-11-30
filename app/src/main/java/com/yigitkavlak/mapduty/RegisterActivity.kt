@@ -28,7 +28,7 @@ class RegisterActivity : AppCompatActivity() {
     }
 
     fun registerClicked(view: View) {
-        val email = userEmailText.text.toString()
+        val email = userEmailText.text.toString().trim()
         val password = userPasswordText.text.toString()
 
         if (TextUtils.isEmpty(email)) {

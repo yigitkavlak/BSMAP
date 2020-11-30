@@ -1,5 +1,7 @@
 package com.yigitkavlak.mapduty
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -30,15 +32,48 @@ class TaskFragment : Fragment() {
 
         saveButton.setOnClickListener {
             Toast.makeText(context!!, " Save Button Clicked", Toast.LENGTH_LONG).show()
+            (activity as MapsActivity).closeTaskFragment()
+            (activity as MapsActivity).setButtonVisible()
+            (activity as MapsActivity).clearMap()
         }
 
         cancelButton.setOnClickListener {
-            Toast.makeText(context!!, " Cancel Button Clicked", Toast.LENGTH_LONG).show()
-            /* if (addTaskbutton.visibility == View.INVISIBLE) {
-                 addTaskbutton.visibility = View.VISIBLE
-             }
 
-             */
+            // AlertDialog nesnemizi üretiyoruz
+            val alert = AlertDialog.Builder(context)
+
+            // Başlık
+            alert.setTitle("İptal")
+
+            //Mesaj
+            alert.setMessage("İptal etmek istediğinize emin misiniz?")
+
+            //Herhangi bir boşluğa basınca kapanmaması için true olursa kapanır
+            //Geri tuşununu da pasif hale getiriyoruz
+            alert.setCancelable(false);
+
+
+            alert.setPositiveButton("Evet") { dialogInterface: DialogInterface, i: Int ->
+
+                // Evet butonuna tıklayınca olacaklar
+                Toast.makeText(context, "Kayıt İptal Edildi", Toast.LENGTH_LONG).show()
+
+                (activity as MapsActivity).closeTaskFragment()
+                (activity as MapsActivity).setButtonVisible()
+                (activity as MapsActivity).clearMap()
+                taskDetailText.text.clear()
+                taskNameText.text.clear()
+            }
+
+            alert.setNegativeButton("Hayır") { dialogInterface: DialogInterface, i: Int ->
+
+                // Hayır butonuna tıklayınca olacaklar
+                  Toast.makeText(context,"İşleme Devam Edebilirsiniz",Toast.LENGTH_LONG).show()
+
+
+            }
+
+            alert.show()
 
 
         }

@@ -10,6 +10,7 @@ import android.location.LocationListener
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,6 +24,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
@@ -34,12 +36,19 @@ import java.util.*
 
 class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
-    private lateinit var mMap: GoogleMap
+    private lateinit var mMap: GoogleMap //GoogleMapApi
     private lateinit var fauth: FirebaseAuth //Firebase
+
     private lateinit var locationManager: LocationManager
     private lateinit var locationListener: LocationListener
-    private val fragmentManager = supportFragmentManager
+
+    private val fragmentManager = supportFragmentManager //FragmentTransaction
     private val taskFragment = TaskFragment()
+
+    var myMarker : Marker? = null
+
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
 
@@ -67,6 +76,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
         fauth = FirebaseAuth.getInstance()
 
     }
@@ -76,7 +86,70 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
 
+        mMap.setOnMarkerDragListener(myListener)
 
+        mMap.setOnMarkerClickListener(clickListener)
+
+
+    }
+    fun addMarker() {
+
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        locationListener = object : LocationListener{
+            override fun onLocationChanged(p0: Location) {
+
+                val userLocation = LatLng(p0.latitude, p0.longitude)
+              myMarker =  mMap.addMarker(
+                    MarkerOptions().position(userLocation).title("Konumunuz").draggable(true)
+                )
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
+
+                val geocoder = Geocoder(this@MapsActivity, Locale.getDefault())
+
+
+                try {
+                    val addressList = geocoder.getFromLocation(p0.latitude, p0.longitude, 1)
+
+                    if (addressList != null && addressList.isNotEmpty()) {
+
+                        println(addressList.get(0).toString()) //logcatte görmek için
+                    }
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+            }
+
+        }
+
+        if (ContextCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                1
+            )
+        } else {
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1,
+                1f,
+                locationListener
+            )
+            val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+            if (lastLocation != null) {
+                val lastKnowLatLng = LatLng(lastLocation.longitude, lastLocation.longitude)
+                mMap.addMarker(
+                    MarkerOptions().position(lastKnowLatLng).title("Konumunuz").draggable(false)
+                )
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastKnowLatLng, 15f))
+            }
+        }
     }
 
     override fun onRequestPermissionsResult(
@@ -93,8 +166,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                 ) {
                     locationManager.requestLocationUpdates(
                         LocationManager.GPS_PROVIDER,
-                        100,
-                        10f,
+                        1,
+                        1f,
                         locationListener
                     )
                 }
@@ -104,8 +177,18 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
     }
 
+    val clickListener = object  : GoogleMap.OnMarkerClickListener {
+        override fun onMarkerClick(p0: Marker?): Boolean {
+            MarkerOptions().icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+
+            return true
+        }
+
+    }
+
     val myListener = object : GoogleMap.OnMarkerDragListener {
         override fun onMarkerDragStart(p0: Marker?) {
+
 
 
         }
@@ -143,8 +226,8 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
                     e.printStackTrace()
                 }
 
-                mMap.addMarker(MarkerOptions().position(p0.position).title(address).draggable(true))
 
+                    MarkerOptions().position(p0.position).title(address).draggable(true)
             } else {
                 Toast.makeText(applicationContext, "Try again", Toast.LENGTH_LONG).show()
             }
@@ -161,7 +244,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             openTaskFragment()
             addTaskbutton.visibility = View.INVISIBLE
 
-            println(addTaskbutton.tag.toString())
 
         } else {
             addTaskbutton.setBackgroundResource(R.drawable.ic_check_button)
@@ -169,9 +251,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
             closeTaskFragment()
             mMap.clear()
             addMarker()
-            if (addTaskbutton.visibility == View.INVISIBLE) {
-                addTaskbutton.visibility = View.VISIBLE
-            }
+
 
 
         }
@@ -198,60 +278,15 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     }
 
-    fun addMarker() {
-        mMap.setOnMarkerDragListener(myListener)
 
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        locationListener = LocationListener { p0 ->
-            val userLocation = LatLng(p0.latitude, p0.longitude)
-            mMap.addMarker(
-                MarkerOptions().position(userLocation).title("Konumunuz").draggable(true)
-            )
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 15f))
-
-            val geocoder = Geocoder(this@MapsActivity, Locale.getDefault())
-
-
-            try {
-                val addressList = geocoder.getFromLocation(p0.latitude, p0.longitude, 1)
-
-                if (addressList != null && addressList.isNotEmpty()) {
-
-                    println(addressList.get(0).toString()) //logcatte görmek için
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
-        }
-
-        if (ContextCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                1
-            )
-        } else {
-            locationManager.requestLocationUpdates(
-                LocationManager.GPS_PROVIDER,
-                1,
-                1f,
-                locationListener
-            )
-            val lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            if (lastLocation != null) {
-                val lastKnowLatLng = LatLng(lastLocation.longitude, lastLocation.longitude)
-                mMap.addMarker(
-                    MarkerOptions().position(lastKnowLatLng).title("Konumunuz").draggable(true)
-                )
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastKnowLatLng, 15f))
-            }
-        }
+    fun setButtonVisible(){
+        addTaskbutton.visibility = View.VISIBLE
     }
 
+
+
+    fun clearMap(){
+        mMap.clear()
+    }
 
 }

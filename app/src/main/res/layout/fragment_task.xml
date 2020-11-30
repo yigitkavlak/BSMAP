@@ -4,15 +4,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/ic_launcher_background"
+    android:background="#BF0099CC"
     tools:context=".TaskFragment">
+
 
     <Button
         android:id="@+id/cancelButton"
-        android:layout_width="0dp"
-        android:layout_height="66dp"
-        android:layout_marginEnd="45dp"
-        android:layout_marginBottom="36dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="75dp"
+        android:layout_marginBottom="30dp"
         android:text="İPTAL"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -20,13 +22,54 @@
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="70dp"
-        android:layout_marginEnd="66dp"
+        android:layout_width="100dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginBottom="30dp"
         android:text="Kaydet"
-        app:layout_constraintBottom_toBottomOf="@+id/cancelButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cancelButton"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <EditText
+        android:id="@+id/taskNameText"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="210dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="18dp"
+        android:background="#BFFFFFFF"
+        android:ems="10"
+        android:hint="İş Emri Adı..."
+        android:inputType="textPersonName"
+        android:paddingStart="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/taskDetailText"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cancelButton" />
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/taskDetailText"
+        android:layout_width="300dp"
+        android:layout_height="400dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="300dp"
+        android:background="#BFFFFCFC"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="İş Emri Açıklaması..."
+        android:inputType="textMultiLine"
+        android:lines="6"
+        android:maxLines="10"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingRight="10dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/taskNameText" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
