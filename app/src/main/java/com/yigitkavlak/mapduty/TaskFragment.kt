@@ -2,6 +2,7 @@ package com.yigitkavlak.mapduty
 
 import android.app.AlertDialog
 import android.content.DialogInterface
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -9,11 +10,13 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.Toast
-import kotlinx.android.synthetic.main.activity_maps.*
+import com.yigitkavlak.mapduty.MapsActivity
+import com.yigitkavlak.mapduty.R
 import kotlinx.android.synthetic.main.fragment_task.*
 
 
 class TaskFragment : Fragment() {
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,6 +38,8 @@ class TaskFragment : Fragment() {
             (activity as MapsActivity).closeTaskFragment()
             (activity as MapsActivity).setButtonVisible()
             (activity as MapsActivity).clearMap()
+
+
         }
 
         cancelButton.setOnClickListener {
@@ -68,7 +73,7 @@ class TaskFragment : Fragment() {
             alert.setNegativeButton("Hayır") { dialogInterface: DialogInterface, i: Int ->
 
                 // Hayır butonuna tıklayınca olacaklar
-                  Toast.makeText(context,"İşleme Devam Edebilirsiniz",Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "İşleme Devam Edebilirsiniz", Toast.LENGTH_LONG).show()
 
 
             }
@@ -82,6 +87,8 @@ class TaskFragment : Fragment() {
 
         return view
     }
+
+
 
 
 }
